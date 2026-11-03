@@ -1,0 +1,13 @@
+1,lapicera,10,1500
+2,cuaderno,3,3500
+3,regla,5,1000
+4,lapicera,20,1500
+5,mochila,1,30000
+6,cuaderno,4,3500
+7,goma,8,800
+8,lapicera,15,1500
+9,regla,2,1000
+10,carpeta,6,2000
+11,cuaderno,2,3500
+12,goma,10,800
+13,mochila,3,30000
