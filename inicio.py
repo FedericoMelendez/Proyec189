@@ -41,3 +41,7 @@ while caja == True:
         print ("opcion incorrecta, ingrese otra opcion")
 
 """Mañana sigo desarrollando. A mimir"""
+
+# Ahí cargué lo que hice yo. Cree los archivos porque no quería tocar nada acá. 
+# Quizás se puede sumar con esto y que quede bien pulido.
+# Cualquier cosa, lo vamos charlando.
