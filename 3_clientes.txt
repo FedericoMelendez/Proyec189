@@ -1,0 +1,12 @@
+1,Lucia Fernandez,15200.50,2026
+2,Martin Gomez,0,2022
+3,Camila Rodriguez,48350,2025
+4,Javier Sosa,2300,2023
+5,Valentina Perez,125000,2024
+6,Nicolas Acosta,8700.75,2021
+7,Sofia Benitez,32000,2026
+8,Diego Romero,0,2023
+9,Florencia Diaz,56800,2025
+10,Matias Herrera,1500,2022
+11,Agustina Lopez,74200.25,2024
+12,Tomas Villalba,19900,2023
