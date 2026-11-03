@@ -16,7 +16,8 @@ crear un menu:
 3-un acumulador por el producto mas vendido y que cantidad.
 4- generar un valor que sea de corte para cuando desee dejar de cargar productos y muestre el resumen del dia
 """
-
+with open ("ventas.txt", "a", encoding="UTF-8") as vent:
+    pass
 caja = True
 while caja == True:
     a=int(input("1.Ingresar venta, 2. Ver ventas, 3. Reporte de ventas, 4. Cerrar caja.\n"))
@@ -32,11 +33,11 @@ while caja == True:
         #se muestran las ventas cargadas, 
         # si no hay ventas se muestra print "Aún no hemos realizado ventas"
         with open ("ventas.txt", "r", encoding="UTF-8") as vendido:
-            for linea in vendido:
-                if (linea != ""):
-                    print (linea)
-                else:
-                    print ("Aún no hemos realizado ventas")
+            contenido_vend = vendido.read()
+            if (contenido_vend != ""):
+                print (contenido_vend)
+            else:
+                print ("Aún no hemos realizado ventas")
     elif a==3:
         # Reporte de ventas del día 
         # a partir del archivo ventas.txt
@@ -44,7 +45,7 @@ while caja == True:
         ventas_prod = {}
         mas_vendido = ""
         valor_max = 0
-        with open ("ventas.txt", "r") as vent:
+        with open ("ventas.txt", "r", encoding="UTF-8") as vent:
             for linea in vent:
                 datos = linea.split(",")
                 # si quiero saber que linea de vent(ventas.txt) está leyendo, agrego
@@ -60,7 +61,7 @@ while caja == True:
         # Si quiero ver el diccionario de ventas por producto, agrego
         # print (ventas_prod)
         print ("El monto total recaudado es:", mtotal)
-        print ("El producto mas vendido es", mas_vendido,"alcanzando las", valor_max,"unidades.")
+        print ("El producto mas vendido es", mas_vendido,"alcanzando las", valor_max,"unidades.\n")
     elif a ==4:
         caja= False
         print ("cerraste caja")
