@@ -1,1 +1,8 @@
-
+Alimentos,Supermercado,45000
+Alimentos,Verdulería,8500
+Alimentos,Carnicería,22000
+Servicios,Luz,18000
+Servicios,Internet,15000
+Transporte,SUBE,10000
+Transporte,Nafta,35000
+Transporte,Peaje,4200
