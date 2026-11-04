@@ -21,8 +21,6 @@ crear un menu:
 with open ("Ejercicio_1/ventas.txt", "a", encoding="UTF-8") as ventas:
     pass 
 
-
-
 caja = True
 
 while caja == True:
