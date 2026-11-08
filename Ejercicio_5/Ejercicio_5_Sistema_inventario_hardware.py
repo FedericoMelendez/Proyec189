@@ -13,7 +13,7 @@ while caja == True:
     a= int(input("1. Dar de alta un componente, 2. Consultar stock, 3. Cerrar caja.\n"))
     if a==1:
         # Se abre el archivo de invetario o se crea si no existe
-        with shelve.open('inventario_hardware', flag ="c") as inventario:
+        with shelve.open('Ejercicio_5/inventario_hardware', flag ="c") as inventario:
                 codigo_barras = input("Ingrese el codigo de barras del componente(13 digitos):\n")
                 # Se valida que el codigo tenga 13 digitos
                 # Se valida que el codigo no se encuentre registrado
@@ -36,7 +36,7 @@ while caja == True:
         while (len(codigo_buscado) != 13):
             print ("Error. El codigo de barras debe tener 13 digitos. Pruebe de nuevo.\n")
             codigo_buscado = input()
-        with shelve.open('inventario_hardware') as busqueda:
+        with shelve.open('Ejercicio_5/inventario_hardware') as busqueda:
             if codigo_buscado in busqueda:
                 producto = busqueda[codigo_buscado]
                 print(f"Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
