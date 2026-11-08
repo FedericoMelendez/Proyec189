@@ -12,8 +12,8 @@ para mantener el historial cronológico de movimientos.
 Se crea el archivo auditoria_prestamos.txt
 Se crea el archivo de libros. (importar Shelve)
 Se muestra Mensaje de menu.
-
-
+Definir la funcion mostrar_libros() para mostrar los libros disponibles en el sistema.
+Colocar un try para que no se rompa el programa si no hay libros cargados.
 
 
 1-Carga de Libros: 
@@ -39,20 +39,31 @@ Se muestra Mensaje de menu.
         Se debe sumar 
 4-Archivo de prestamos.
     Si el archivo esta vacio, se muestra cartel de que no retiro nadie.
-    Debe mostrar: - Libro que se retiro y persona, y fecha
+    Debe mostrar: - Libro que se retiro , persona, y fecha
 """
 import shelve
+import time # Con time podemos hacer pausas para que el usuario pueda leer la informacion.
 
 #Creamos de entrada el archivo txt de prestamos.
 with open ("Ejercicio_8/auditoria_prestamos.txt", "a", encoding="UTF-8") as ventas:
     pass 
+
+def mostrar_libros(): # Definimos la funcion para mostrar los libros disponibles en el sistema.
+    with shelve.open('Ejercicio_8/biblioteca_db') as libros:
+        print ("=================== LISTADO DE LIBROS ===================")
+        for isbn, datos in libros.items():
+            print(f"ISBN: {isbn}, Nombre: {datos['nombre']}, Autor: {datos['autor']}, Stock: {datos['stock']}\n")
+        print ("=========================================================")
+        time.sleep(2) # Pausa de 2 segundos para que el usuario pueda leer la lista de libros antes de volver al menú principal.
+
+
 
 ejecutando=True
 while ejecutando == True:
 
     #Bloque del menu
     print("""============================================================
-                📚 BIENVENIDO A LA BIBLIOTECA CENTRAL 📚
+                - BIENVENIDO A LA BIBLIOTECA CENTRAL-
     ============================================================
     1.  Carga de Libros
     2.  Consultar Libro por ISBN (Catálogo)
@@ -62,7 +73,7 @@ while ejecutando == True:
     ------------------------------------------------------------\n""")
     opcion = int(input ("---> Ingrese una opcion 1-5: "))
 
-    if opcion ==1:
+    if opcion == 1:
 
         print ( " ======== Bienvenido a la carga de libros ======== ")
         # Se abre el archivo de invetario o se crea si no existe
@@ -71,18 +82,126 @@ while ejecutando == True:
 
             while (len(num_isbn)) != 13:
                     print ("Error. El codigo de ISBN debe tener 13 digitos.")
-                    num_isbn = input("Ingrese el numero de ISBN nuevamente:\n").strip
+                    num_isbn = input("Ingrese el numero de ISBN nuevamente:\n").strip()
 
             #Condiciones para cargar el libro.
             if num_isbn in libros:
                 libro_existente = libros[num_isbn] #guardo los datos del diccionario con la clave isbn
                 libro_existente ["stock"] += 1 #Sumamos una unidad del libro
                 libros[num_isbn] = libro_existente #Volvemos a guardar el stock.
-                print (f"El ISBN {num_isbn} que ingreso ya se encuentra registrado, se sumo el libro al stock")
+                print (f"El ISBN {num_isbn} que corresponde al libro {libro_existente['nombre']} ya se encuentra registrado, se sumo el libro al stock\n\n")
+                time.sleep(1)
             else:
                 name_libro= input("Ingrese el nombre del libro: \n").strip()
                 autor = input("Ingrese el nombre del autor: \n").strip()
                 stock = int(input("Ingrese la cantidad de stock inicial: \n"))
                 #Guardamos los datos en el diccionario.
                 libros[num_isbn] = {"nombre": name_libro, "autor": autor, "stock": stock}
-                print("----- Usted a ingresado su libro con exito -----")
+                print("----- Usted a ingresado su libro con exito -----\n\n")
+                time.sleep(2)
+    elif opcion == 2:
+    
+        print ( " ======== Bienvenido a la consulta de libros ======== \n")
+
+        with shelve.open('Ejercicio_8/biblioteca_db') as libros:
+
+            if (len(libros)) == 0: 
+                print ("Por el momento no se ingresaron libros. Ingrese un libro para contar con un nuevo ejemplar")
+            else:
+                bus_isbn = input(" Ingrese el numero de ISBN del libro a buscar (recuerde que debe contener 13 digitos): \n").strip()
+        
+            while (len(bus_isbn)) != 13:
+                print ("Error. El codigo de ISBN debe tener 13 digitos.")
+                bus_isbn = input("Ingrese el numero de ISBN nuevamente:\n").strip()
+
+            # Verificamos si el ISBN ingresado se encuentra en el registro de libros. 
+
+            if bus_isbn in libros:
+                libro = libros[bus_isbn]
+                print(f"Nombre: {libro['nombre']}, Autor: {libro['autor']}, Stock: {libro['stock']}\n\n")
+                time.sleep(2)
+            else:
+                print (f"El ISBN que usted busca (Cod. {bus_isbn}) aun no se encuentra en este registro.\n\n")
+                mostrar_libros() #Funcion para mostrar los libros disponibles en el sistema.
+                time.sleep(2)
+
+    elif opcion == 3:
+        print ( " ======== Bienvenido a la solicitud de prestamos ======== \n")
+
+        #Pedimos que ingrese el nombre de la persona, para tener un registro.
+
+        nombre_persona = input("Ingrese su nombre para poder retirar un libro: \n").strip()
+
+        #Verificacion de que el nombre no este vacio.
+        while nombre_persona == "":
+            print ("Error. Debe ingresar un nombre para poder retirar un libro.")
+            nombre_persona = input("Ingrese su nombre nuevamente:\n").strip()
+
+        print ("A continuacion la lista de libros \n")
+        mostrar_libros() 
+        time.sleep(1)
+        bus_isbn = input("Ingrese el numero de ISBN del libro a retirar (recuerde que debe contener 13 digitos): \n").strip()
+        
+        while (len(bus_isbn)) != 13:
+            print ("Error. El codigo de ISBN debe tener 13 digitos.")
+            bus_isbn = input("Ingrese el numero de ISBN nuevamente:\n").strip()
+
+        # Consultamos si el ISBN ingresado se encuentra en el registro de libros y si hay stock disponible para poder realizar el prestamo.
+
+        with shelve.open('Ejercicio_8/biblioteca_db') as libros:
+
+            if bus_isbn in libros:
+                libro = libros[bus_isbn]
+
+                #Decimos que si hay stock disponible se descuente 1 del stock y se guarde la transaccion en el archivo de auditoria.
+
+                if libro['stock'] > 0:
+                    libro['stock'] -= 1
+                    libros[bus_isbn] = libro
+
+                    print(f"El libro '{libro['nombre']}' ha sido retirado por {nombre_persona}. Stock restante: {libro['stock']}\n\n\n")
+                    time.sleep(1)
+                    # Guardamos la transacción en el archivo de auditoría
+
+                    with open("Ejercicio_8/auditoria_prestamos.txt", "a", encoding="UTF-8") as auditoria:
+
+                        # Solicitamos la fecha y hora del retiro para registrar en el archivo de auditoria.
+
+                        fecha_hora = input("Ingrese la fecha del retiro (formato: AAAA-MM-DD ): \n").strip()
+                        print(f" El usuario {nombre_persona} ha retirado el libro '{libro['nombre']}' correctamente")   
+                        auditoria.write(f"{fecha_hora} - {nombre_persona} retiró '{libro['nombre']}' (ISBN: {bus_isbn})\n")
+                        time.sleep(2)
+                else:
+                    print(f"No hay stock disponible para el libro '{libro['nombre']}'.\n\n\n")
+                    time.sleep(1)
+            else:
+                print (f"El ISBN que usted busca {bus_isbn} aun no se encuentra en este registro.\n\n\n")
+                mostrar_libros()
+                time.sleep(2)
+    elif opcion == 4:
+        print ( " ======== Auditoría de prestamos ======== \n")
+
+        # Abrimos el archivo de auditoria para mostrar el historial de prestamos. Utilizamos un try por si el archivo no existe o esta vacio.
+        try:
+            with open("Ejercicio_8/auditoria_prestamos.txt", "r", encoding="UTF-8") as auditoria:
+                contenido = auditoria.readlines()
+                # Consulta si hay contenido en el archivo txt y sino muetra el mensaje de que no hay prestamos registrados.
+                if len(contenido) > 0 :
+                    print("Historial de préstamos ordenados cronológicamente:\n")
+
+                    contenido.sort()  # Ordenamos el contenido por fecha.
+                    for linea in contenido:
+                        print(linea.strip())    
+                        time.sleep(2)
+                else:
+                    print("No se han registrado préstamos aún.")
+                    time.sleep(1)
+        except FileNotFoundError:
+            print("No se han registrado préstamos aún.")
+            time.sleep(1)
+    elif opcion == 5:
+        print ( " ======== Saliendo del sistema de biblioteca ======== \n")
+        ejecutando = False
+    else:
+        print ("Opción inválida. Por favor, ingrese un número del 1 al 5.\n")
+        time.sleep(2)
