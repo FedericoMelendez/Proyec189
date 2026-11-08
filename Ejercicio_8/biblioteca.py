@@ -12,7 +12,7 @@ para mantener el historial cronológico de movimientos.
 Se crea el archivo auditoria_prestamos.txt
 Se crea el archivo de libros. (importar Shelve)
 Se muestra Mensaje de menu.
-importar datatime
+
 
 
 
