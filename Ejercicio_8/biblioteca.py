@@ -170,7 +170,7 @@ while ejecutando == True:
 
                     with open("auditoria_prestamos.txt", "a", encoding="UTF-8") as auditoria:
 
-                        # Solicitamos la fecha y hora del retiro para registrar en el archivo de auditoria.
+                        # Solicitamos la fecha para registrar en el archivo de auditoria.
 
                         fecha_hora = input("Ingrese la fecha del retiro (formato: AAAA-MM-DD ): \n").strip()
                         print(f" El usuario {nombre_persona} ha retirado el libro '{libro['nombre']}' correctamente")   
